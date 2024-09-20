@@ -16,7 +16,10 @@ plugins {
     id("de.infolektuell.bass") version "0.1.0"
 }
 
-bass.plugins = listOf("flac", "mix")
+bass.libraries {
+    register("bassflac")
+    register("bassmix")
+}
 ```
 
 ## License
