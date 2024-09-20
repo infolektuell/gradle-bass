@@ -17,6 +17,6 @@ class GradleBassPluginTest {
         project.plugins.apply(GradleBassPlugin.PLUGIN_NAME)
 
         // Verify the result
-        assertNotNull(project.tasks.findByName("greeting"))
+        assertNotNull(project.tasks.findByName("extractBass"))
     }
 }

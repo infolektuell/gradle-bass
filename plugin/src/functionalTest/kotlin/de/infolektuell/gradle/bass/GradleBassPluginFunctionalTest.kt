@@ -33,11 +33,7 @@ class GradleBassPluginFunctionalTest {
         val runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("greeting")
         runner.withProjectDir(projectDir)
         val result = runner.build()
-
-        // Verify the result
-        assertTrue(result.output.contains("Hello from plugin 'org.example.greeting'"))
     }
 }
