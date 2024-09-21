@@ -11,8 +11,9 @@ This Gradle plugin automates this process and makes the relevant files available
 
 ## Usage
 
-```
+```gradle kotlin dsl
 plugins {
+    id("base")
     id("de.infolektuell.bass") version "0.1.0"
 }
 
