@@ -41,6 +41,7 @@ class GradleBassPlugin: Plugin<Project> {
             task.headers.convention(project.layout.buildDirectory.dir("bass/includes")).finalizeValueOnRead()
             task.binaries.convention(project.layout.buildDirectory.dir("bass/lib")).finalizeValueOnRead()
         }
+        project.tasks.findByName("assemble")?.dependsOn(extractTask)
     }
     companion object {
         const val PLUGIN_NAME = "de.infolektuell.bass"
