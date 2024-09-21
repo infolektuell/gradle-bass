@@ -38,8 +38,9 @@ class GradleBassPlugin: Plugin<Project> {
         }
         val extractTask = project.tasks.register("extractBass", ExtractBass::class.java) { task ->
             task.archives.convention(downloadTask.flatMap { it.destinationDir }).finalizeValueOnRead()
-            task.headers.convention(project.layout.buildDirectory.dir("bass/includes")).finalizeValueOnRead()
-            task.binaries.convention(project.layout.buildDirectory.dir("bass/lib")).finalizeValueOnRead()
+            task.natives.convention(project.layout.buildDirectory.dir("bass/natives")).finalizeValueOnRead()
+            task.headers.convention("include").finalizeValueOnRead()
+            task.libs.convention("lib").finalizeValueOnRead()
         }
         project.tasks.withType(org.gradle.language.cpp.tasks.CppCompile::class.java) { it.dependsOn(extractTask) }
         project.tasks.findByName("assemble")?.dependsOn(extractTask)
