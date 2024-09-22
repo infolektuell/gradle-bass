@@ -5,4 +5,5 @@ plugins {
 
 rootProject.name = "examples"
 include("cpp-application")
+include("ffm-wrapper")
 includeBuild("../")

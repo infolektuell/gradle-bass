@@ -2,7 +2,7 @@ import de.infolektuell.gradle.bass.tasks.ExtractBass
 
 plugins {
     `cpp-application`
-    id("de.infolektuell.bass") version "0.1.0"
+    id("de.infolektuell.bass")
 }
 
 bass.libraries {
