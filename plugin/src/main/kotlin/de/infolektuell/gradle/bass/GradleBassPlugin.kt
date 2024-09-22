@@ -12,6 +12,7 @@ class GradleBassPlugin: Plugin<Project> {
         val constants = BassConstants()
         val downloadClient = project.gradle.sharedServices.registerIfAbsent("${project.name}_${DownloadClient.SERVICE_NAME}", DownloadClient::class.java)
         val extension = project.extensions.create(BassExtension.EXTENSION_NAME, BassExtension::class.java)
+        extension.natives.convention(project.layout.buildDirectory.dir("bass/natives"))
         extension.libraries.configureEach { lib ->
             lib.resources { r ->
                 r.register("linux")
@@ -38,12 +39,11 @@ class GradleBassPlugin: Plugin<Project> {
         }
         val extractTask = project.tasks.register("extractBass", ExtractBass::class.java) { task ->
             task.archives.convention(downloadTask.flatMap { it.destinationDir }).finalizeValueOnRead()
-            task.natives.convention(project.layout.buildDirectory.dir("bass/natives")).finalizeValueOnRead()
+            task.natives.convention(extension.natives).finalizeValueOnRead()
             task.headers.convention("include").finalizeValueOnRead()
             task.libs.convention("lib").finalizeValueOnRead()
         }
-        project.tasks.withType(org.gradle.language.cpp.tasks.CppCompile::class.java) { it.dependsOn(extractTask) }
-        project.tasks.findByName("assemble")?.dependsOn(extractTask)
+        extension.files.natives.convention(extractTask.flatMap { it.natives }).finalizeValueOnRead()
     }
     companion object {
         const val PLUGIN_NAME = "de.infolektuell.bass"

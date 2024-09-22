@@ -1,5 +1,3 @@
-import de.infolektuell.gradle.bass.tasks.ExtractBass
-
 plugins {
     `cpp-application`
     id("de.infolektuell.bass")
@@ -8,11 +6,10 @@ plugins {
 bass.libraries {
     register("bassmix")
 }
-val extractTask: ExtractBass = tasks.withType(ExtractBass::class).first()
 
 application {
     dependencies {
-        implementation(fileTree(extractTask.natives.dir("lib")))
+        implementation(fileTree(bass.files.binaries))
     }
-    privateHeaders.from(extractTask.natives.dir("include"))
+    privateHeaders.from(bass.files.headers)
 }
