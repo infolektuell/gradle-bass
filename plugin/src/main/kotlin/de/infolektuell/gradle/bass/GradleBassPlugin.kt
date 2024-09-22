@@ -10,7 +10,7 @@ import org.gradle.api.Project
 class GradleBassPlugin: Plugin<Project> {
     override fun apply(project: Project) {
         val constants = BassConstants()
-        val downloadClient = project.gradle.sharedServices.registerIfAbsent(DownloadClient.SERVICE_NAME, DownloadClient::class.java)
+        val downloadClient = project.gradle.sharedServices.registerIfAbsent("${project.name}_${DownloadClient.SERVICE_NAME}", DownloadClient::class.java)
         val extension = project.extensions.create(BassExtension.EXTENSION_NAME, BassExtension::class.java)
         extension.libraries.configureEach { lib ->
             lib.resources { r ->
