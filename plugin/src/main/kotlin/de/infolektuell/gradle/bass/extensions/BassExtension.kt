@@ -11,7 +11,9 @@ abstract class BassExtension @Inject constructor(objects: ObjectFactory) {
     fun libraries(action: Action<in NamedDomainObjectContainer<LibraryHandler>>) {
         action.execute(libraries)
     }
+    /** The directory where the native bass files should be stored */
     abstract val natives: DirectoryProperty
+    /** Auxiliary providers for accessing the bass headers and binaries after they have been downloaded and extracted */
     @get:Nested
     abstract val layout: LayoutHandler
     companion object {
