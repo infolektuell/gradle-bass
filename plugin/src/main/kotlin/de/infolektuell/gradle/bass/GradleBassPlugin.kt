@@ -43,7 +43,7 @@ class GradleBassPlugin: Plugin<Project> {
             task.headers.convention("include").finalizeValueOnRead()
             task.libs.convention("lib").finalizeValueOnRead()
         }
-        extension.files.natives.convention(extractTask.flatMap { it.natives }).finalizeValueOnRead()
+        extension.layout.extractTask.convention(extractTask).finalizeValueOnRead()
     }
     companion object {
         const val PLUGIN_NAME = "de.infolektuell.bass"

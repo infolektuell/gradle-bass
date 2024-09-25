@@ -9,7 +9,7 @@ bass.libraries {
 
 application {
     dependencies {
-        implementation(fileTree(bass.files.binaries))
+        implementation(fileTree(bass.layout.lib))
     }
-    privateHeaders.from(bass.files.headers)
+    privateHeaders.from(bass.layout.include)
 }
