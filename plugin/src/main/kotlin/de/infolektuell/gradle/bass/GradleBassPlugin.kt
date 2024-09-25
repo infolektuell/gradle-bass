@@ -6,8 +6,9 @@ import de.infolektuell.gradle.bass.tasks.DownloadClient
 import de.infolektuell.gradle.bass.tasks.ExtractBass
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.bundling.Zip
 
-class GradleBassPlugin: Plugin<Project> {
+class GradleBassPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val constants = BassConstants()
         val downloadClient = project.gradle.sharedServices.registerIfAbsent("${project.name}_${DownloadClient.SERVICE_NAME}", DownloadClient::class.java)
@@ -43,7 +44,19 @@ class GradleBassPlugin: Plugin<Project> {
             task.headers.convention("include").finalizeValueOnRead()
             task.libs.convention("lib").finalizeValueOnRead()
         }
-        extension.files.natives.convention(extractTask.flatMap { it.natives }).finalizeValueOnRead()
+        extension.layout.rootDirectory.convention(extractTask.flatMap { it.natives }).finalizeValueOnRead()
+        val archiveHeaders = project.tasks.register("archiveHeaders", Zip::class.java) { task ->
+            task.from(extractTask.flatMap { it.natives.dir("include") })
+            task.destinationDirectory.set(project.layout.buildDirectory.dir("headers"))
+            task.archiveClassifier.set("cpp-api-headers")
+            task.archiveFileName.set("cpp-api-headers.zip")
+        }
+        project.plugins.apply(BassPublicationPlugin::class.java)
+        project.configurations.getByName("headers").outgoing.artifact(archiveHeaders)
+        project.configurations.getByName("linkDebug").outgoing.artifact(extractTask.flatMap { it.natives.file("lib/libbass.dylib") })
+        project.configurations.getByName("linkRelease").outgoing.artifact(extractTask.flatMap { it.natives.file("lib/libbass.dylib") })
+        project.configurations.getByName("runtimeDebug").outgoing.artifact(extractTask.flatMap { it.natives.file("lib/libbass.dylib") })
+        project.configurations.getByName("runtimeRelease").outgoing.artifact(extractTask.flatMap { it.natives.file("lib/libbass.dylib") })
     }
     companion object {
         const val PLUGIN_NAME = "de.infolektuell.bass"

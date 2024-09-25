@@ -1,15 +1,16 @@
 plugins {
     `cpp-application`
-    id("de.infolektuell.bass")
+    // id("de.infolektuell.bass")
 }
 
-bass.libraries {
-    register("bassmix")
+repositories {
+    mavenLocal()
 }
 
 application {
     dependencies {
-        implementation(fileTree(bass.files.binaries))
+        // implementation(fileTree(bass.layout.lib))
+        implementation("com.un4seen:bass:2.4.17-SNAPSHOT")
     }
-    privateHeaders.from(bass.files.headers)
+    // privateHeaders.from(bass.layout.include)
 }

@@ -13,7 +13,7 @@ abstract class BassExtension @Inject constructor(objects: ObjectFactory) {
     }
     abstract val natives: DirectoryProperty
     @get:Nested
-    abstract val files: FilesHandler
+    abstract val layout: LayoutHandler
     companion object {
         const val EXTENSION_NAME = "bass"
     }
