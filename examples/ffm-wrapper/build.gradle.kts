@@ -14,6 +14,7 @@ jextract {
             header = bass.layout.header("bass.h")
             targetPackage = "com.un4seen.bass"
             headerClassName = "Bass"
+            whitelist.functions.add("BASS_GetVersion")
             libraries.add("bass")
             useSystemLoadLibrary = true
         }
