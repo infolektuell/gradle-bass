@@ -1,5 +1,3 @@
-import de.infolektuell.gradle.bass.tasks.ExtractBass
-
 plugins {
     `java-library`
     kotlin("jvm") version "2.0.20"
@@ -10,12 +8,10 @@ plugins {
 bass.libraries {
     register("bassmix")
 }
-val extractTask: ExtractBass = tasks.withType(ExtractBass::class).first()
-
 jextract {
     libraries {
         create("bass") {
-            header = extractTask.natives.file("bass.h")
+            header = bass.layout.header("bass.h")
             targetPackage = "com.un4seen.bass"
             headerClassName = "Bass"
             libraries.add("bass")
@@ -33,9 +29,21 @@ repositories {
 }
 
 dependencies {
-    runtimeOnly(fileTree(extractTask.natives.dir("lib")))
     // Use the Kotlin JUnit 5 integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+val copyNatives by tasks.creating(Copy::class) {
+    dependsOn(bass.layout.extractTask)
+    from(fileTree(bass.layout.lib))
+    include("*.dylib", "*.dll", "*.so")
+    into(layout.buildDirectory.dir("libs"))
+}
+
+tasks.named<Test>("test") {
+    dependsOn(copyNatives)
+    useJUnitPlatform()
+    jvmArgs("--enable-preview", "--enable-native-access=ALL-UNNAMED", "-Djava.library.path=${copyNatives.destinationDir.absolutePath}")
 }
